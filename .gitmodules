@@ -1,0 +1,3 @@
+[submodule "c42libs"]
+	path = c42libs
+	url = git@github.com:AlphanumericString/c42libs
