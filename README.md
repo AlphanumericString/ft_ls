@@ -42,4 +42,28 @@ The other options eg 'u' 'f' 'g' 'd' and others are bonuses.
 | | "help" | print help |
 
 
+## TODO
+cleanup main struct:
+mandatory no bonus version:
+    print_range = [ all, default (skip \..*) ]
+    recursive = [ true, false (default) ]
+    format_display = [ long, names (default)]
+    sort_order = [ mtime, alpha (default)]
+    order_modifier = [ reverse, none (default)]
+bonuses:
+    print_range = [ all, almost-all, default (skip \..*) ]
+    skip_backups = [ true, false (default) ]
+    recursive = [ true, false (default) ]
+    format_display = [ long, sizes, names (default)]
+    print_modifier = [ no_groups, append_all, append_skip_exe, ctime, human_sizes, power_sizes]
+    sort_order = [ alpha, ctime, sizes, mtime]
+    order_modifier = [ reverse, dir_first]
 
+TODO:
+[x] implement mandatory version of the struct
+[x] implement parser for args
+[x] implement recursive
+[x] files - sort && print
+[ ] replace printf's call
+[x] norming
+[ ] take correction on project

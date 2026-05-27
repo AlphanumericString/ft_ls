@@ -84,8 +84,17 @@ NAME			=	ft_ls
 # $(error "You must define the 'NAME' variable with your target name")
 # -- sources
 SRCS			=\
+				$(SRC_DIR)/comparators.c	\
+				$(SRC_DIR)/dir_core.c	\
+				$(SRC_DIR)/dir_dumps.c	\
+				$(SRC_DIR)/epoch_to_date.c	\
+				$(SRC_DIR)/file_core.c	\
+				$(SRC_DIR)/file_dumps.c	\
 				$(SRC_DIR)/main.c	\
-				$(SRC_DIR)/util.c
+				$(SRC_DIR)/parse_opt.c	\
+				$(SRC_DIR)/path_utils.c	\
+				$(SRC_DIR)/util.c	\
+
 OBJS			=	$(addprefix $(BUILD_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
 REQS			=	$(patsubst %.o, %.d, $(OBJS))
 TSRCS			=	$(shell find $(TST_DIR) -name "*.c" -or -name "*.cpp" -type f 2>/dev/null)
