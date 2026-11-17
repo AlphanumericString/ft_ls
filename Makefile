@@ -42,7 +42,7 @@ LOG_MAJ	=	$(YELLOW)
 #  -- Dirs
 INCLUDES_DIRS	=	./include ./c42libs/include
 SRC_DIR			=	src
-TST_DIR			=	tests_src
+TST_DIR			=	test_src
 BUILD_DIR		=	build
 
 # -- Files
@@ -101,8 +101,8 @@ SRCS			=\
 
 OBJS			=	$(addprefix $(BUILD_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
 REQS			=	$(patsubst %.o, %.d, $(OBJS))
-TSRCS			=	$(shell find $(TST_DIR) -name "*.c" -or -name "*.cpp" -type f 2>/dev/null)
-TOBJS			=	$(addprefix $(BUILD_DIR)/, $(patsubst %.c, %.o, $(TSRCS)))
+TSRCS			=	$(shell find $(TST_DIR) -type f \( -name "*.c" -o -name "*.cpp" \) 2>/dev/null)
+TOBJS			=	$(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(TSRCS))))
 TREQS			=	$(patsubst %.o, %.d, $(TOBJS))
 
 
@@ -134,30 +134,17 @@ $(BUILD_DIR)/%.o:%.cpp | $(BUILD_DIR)/
 	$(CC) $(CXXFLAGS) -c $< -o $@ 2>> $(LOGFILE)			&& \
 	$(PRINT) "$(OK)Success$(RESET)\n"						|| \
 	$(PRINT) "$(KO)Fail$(RESET)\n"
-#	tests objs
-$(BUILD_DIR)/%.o:$(TST_DIR)/%.c | $(BUILD_DIR)/
-	@$(call create_dir,$(dir $@))							&& \
-	$(PRINT) "$(LOG_MIN)Compiling $(notdir $<)...$(RESET)"	&& \
-	$(CC) $(CFLAGS) -c $< -o $@ 2>> $(LOGFILE)				&& \
-	$(PRINT) "$(OK)Success$(RESET)\n"						|| \
-	$(PRINT) "$(KO)Fail$(RESET)\n"
-$(BUILD_DIR)/%.o:$(TST_DIR)/%.cpp | $(BUILD_DIR)/
-	@$(call create_dir,$(dir $@))							&& \
-	$(PRINT) "$(LOG_MIN)Compiling $(notdir $<)...$(RESET)"	&& \
-	$(CC) $(CXXFLAGS) -c $< -o $@ 2>> $(LOGFILE)			&& \
-	$(PRINT) "$(OK)Success$(RESET)\n"						|| \
-	$(PRINT) "$(KO)Fail$(RESET)\n"
 # -- Targets
 ./c42libs/libc42lib.a:
 	@$(MAKE) -C $(dir $@)
 $(NAME): $(OBJS) ./c42libs/libc42lib.a
 	@$(PRINT) "$(LOG_MAJ)Linking $(NAME)...$(RESET)"	&& \
-	$(CC) $(OBJS) $(FLAGS) -o $(NAME) $(LD_FLAGS)		&& \
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LD_FLAGS)		&& \
 	$(PRINT) "$(OK)Success$(RESET)\n"					|| \
 	$(PRINT) "$(KO)Fail$(RESET)\n"
-$(NAME)_tests: $(TOBJS)
+$(NAME)_tests: $(TOBJS) ./c42libs/libc42lib.a
 	@$(PRINT) "$(LOG_MAJ)Linking $(NAME)'s tests...$(RESET)"	&& \
-	$(CC) $(TOBJS) $(FLAGS) -o $(NAME) $(LD_FLAGS)				&& \
+	$(CC) $(CFLAGS) $(TOBJS) -o $(NAME)_tests $(LD_FLAGS)		&& \
 	$(PRINT) "$(OK)Success$(RESET)\n"							|| \
 	$(PRINT) "$(KO)Fail$(RESET)\n"
 clean:
@@ -167,8 +154,8 @@ clean:
 	$(PRINT) "$(KO)Fail$(RESET)\n"
 fclean: clean
 	@$(PRINT) "$(LOG_MAJ)Cleaning compiled files...$(RESET)"		&& \
-	$(RM) -f $(NAME) 										&& \
-	$(MAKE_SL) -C c42libs fclean								&& \
+	$(RM) -f $(NAME) $(NAME)_tests							&& \
+	$(RM) -rf c42libs/build/ ./c42libs/libc42lib.a			&& \
 	$(PRINT) "$(OK)Success$(RESET)\n"						|| \
 	$(PRINT) "$(KO)Fail$(RESET)\n"
 uclean: fclean
