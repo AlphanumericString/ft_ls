@@ -24,7 +24,7 @@ static void	st_files(struct dirent_stated *ds, t_vector *vec, const char *dir)
 {
 	ds->full_name = join_dir(dir, ds->d.d_name);
 	ds->name = ft_strdup(ds->d.d_name);
-	if (stat(ds->full_name, &ds->s) >= 0)
+	if (lstat(ds->full_name, &ds->s) >= 0)
 	{
 		ft_vec_add(vec, ds);
 		return ;

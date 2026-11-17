@@ -85,15 +85,19 @@ NAME			=	ft_ls
 # -- sources
 SRCS			=\
 				$(SRC_DIR)/comparators.c	\
-				$(SRC_DIR)/dir_core.c	\
-				$(SRC_DIR)/dir_dumps.c	\
+				$(SRC_DIR)/dir_core.c		\
+				$(SRC_DIR)/dir_dumps.c		\
 				$(SRC_DIR)/epoch_to_date.c	\
-				$(SRC_DIR)/file_core.c	\
-				$(SRC_DIR)/file_dumps.c	\
-				$(SRC_DIR)/main.c	\
-				$(SRC_DIR)/parse_opt.c	\
-				$(SRC_DIR)/path_utils.c	\
-				$(SRC_DIR)/util.c	\
+				$(SRC_DIR)/file_core.c		\
+				$(SRC_DIR)/file_dumps.c		\
+				$(SRC_DIR)/link_dump.c		\
+				$(SRC_DIR)/main.c			\
+				$(SRC_DIR)/parse_opt.c		\
+				$(SRC_DIR)/path_utils.c		\
+				$(SRC_DIR)/print_help.c		\
+				$(SRC_DIR)/stat_dump.c		\
+				$(SRC_DIR)/util.c			\
+				$(SRC_DIR)/util_dump.c		\
 
 OBJS			=	$(addprefix $(BUILD_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
 REQS			=	$(patsubst %.o, %.d, $(OBJS))
@@ -144,9 +148,9 @@ $(BUILD_DIR)/%.o:$(TST_DIR)/%.cpp | $(BUILD_DIR)/
 	$(PRINT) "$(OK)Success$(RESET)\n"						|| \
 	$(PRINT) "$(KO)Fail$(RESET)\n"
 # -- Targets
-c42libs/c42libs.a:
+./c42libs/libc42lib.a:
 	@$(MAKE) -C $(dir $@)
-$(NAME): $(OBJS) c42libs/c42libs.a
+$(NAME): $(OBJS) ./c42libs/libc42lib.a
 	@$(PRINT) "$(LOG_MAJ)Linking $(NAME)...$(RESET)"	&& \
 	$(CC) $(OBJS) $(FLAGS) -o $(NAME) $(LD_FLAGS)		&& \
 	$(PRINT) "$(OK)Success$(RESET)\n"					|| \
@@ -164,6 +168,7 @@ clean:
 fclean: clean
 	@$(PRINT) "$(LOG_MAJ)Cleaning compiled files...$(RESET)"		&& \
 	$(RM) -f $(NAME) 										&& \
+	$(MAKE_SL) -C c42libs fclean								&& \
 	$(PRINT) "$(OK)Success$(RESET)\n"						|| \
 	$(PRINT) "$(KO)Fail$(RESET)\n"
 uclean: fclean

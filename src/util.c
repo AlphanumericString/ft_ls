@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -79,7 +78,7 @@ bool	is_unreachable(void *a)
 {
 	struct stat	s;
 
-	if (stat(*(char **)a, &s) == -1)
+	if (lstat(*(char **)a, &s) == -1)
 		return (ft_print_fd(STDERR_FILENO,
 				"%s: cannot access '%s': %m\n", "ft_ls", *(char **)a),
 			1);

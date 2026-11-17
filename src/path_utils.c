@@ -18,7 +18,7 @@ bool	is_file(const void *d)
 {
 	struct stat	sta;
 
-	stat(*(char **)d, &sta);
+	lstat(*(char **)d, &sta);
 	if (!S_ISDIR(sta.st_mode))
 		return (true);
 	return (false);

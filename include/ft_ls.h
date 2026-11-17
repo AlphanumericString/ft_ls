@@ -57,6 +57,7 @@ typedef struct s_ls_state2 {
 	enum e_om	order_modifier;
 	t_vector	*tagets;
 	bool		files_section;
+	bool		stop;
 } t_ls;
 
 typedef struct s_fulldate {
@@ -73,8 +74,11 @@ void	dump_debug(void *a);
 void	dirdump_name(void *a);
 void	dirdump_long(void *a);
 void	dirdump_total(t_vector *ve);
+void	dump_date(t_fulldate d);
 void	fdump_name(void *a);
 void	fdump_long(void *a);
+void	dump_link(const char *name, struct stat s);
+void	dump_stat(struct stat s);
 
 // utils - dir
 bool		is_file(const void *d);
@@ -89,6 +93,7 @@ bool		is_unreachable(void *a);
 int			strcmp_sptr(void *a, void *b);
 
 // parse_opt
+void		print_help(int fd);
 int			parse_opt2(t_ls *state, int ac, char **av);
 
 // comparators.
@@ -100,4 +105,4 @@ int	fsort_mt(const void *a, const void *b);
 
 // cores
 int ls_dir(const char *dir, const t_ls *ctx);
-int	handle_files(t_vector *files, t_ls st);
+int	handle_files(t_vector *files, t_ls *st);

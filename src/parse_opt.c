@@ -28,6 +28,8 @@ static int	handle_longopt(t_ls *st, char *a)
 		return (st->print_range = LS_PR_all, 0);
 	if (ft_strcmp(a, "--reverse") == 0)
 		return (st->order_modifier = LS_OM_reverse, 0);
+	if (ft_strcmp(a, "--help") == 0)
+		return (print_help(STDOUT_FILENO), st->stop = true, 0);
 	ft_print_fd(STDERR_FILENO, UOPTS TRY_HELP, "ft_ls", a, "ft_ls");
 	return (1);
 }
